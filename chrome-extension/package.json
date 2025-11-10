@@ -1,0 +1,47 @@
+{
+  "name": "hivemind-chrome",
+  "displayName": "Hive Mind - AI Code Intelligence",
+  "version": "1.0.0",
+  "description": "Inject collective intelligence into GitHub, Stack Overflow, ChatGPT, and Claude",
+  "author": "Hive Mind Team",
+  "packageManager": "npm@10.2.5",
+  "scripts": {
+    "dev": "plasmo dev",
+    "build": "plasmo build",
+    "package": "plasmo package"
+  },
+  "dependencies": {
+    "@plasmohq/storage": "^1.15.0",
+    "axios": "^1.6.2",
+    "plasmo": "^0.84.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "sharp": "^0.34.4",
+    "socket.io-client": "^4.7.2",
+    "zustand": "^4.5.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.254",
+    "@types/node": "^20.10.7",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.17",
+    "postcss": "^8.4.33",
+    "prettier": "^3.1.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.3.3"
+  },
+  "manifest": {
+    "host_permissions": [
+      "https://github.com/*",
+      "https://stackoverflow.com/*",
+      "https://chat.openai.com/*",
+      "https://claude.ai/*"
+    ],
+    "permissions": [
+      "storage",
+      "activeTab"
+    ]
+  },
+  "icon": "assets/icon.png"
+}

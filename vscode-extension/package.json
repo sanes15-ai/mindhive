@@ -1,0 +1,676 @@
+{
+  "name": "mindhive-vscode",
+  "displayName": "MindHive - Collective Intelligence",
+  "description": "Real-time collective code intelligence, predictive AI, and self-healing workflows",
+  "version": "1.0.0",
+  "publisher": "mindhive",
+  "icon": "assets/icon.png",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Machine Learning",
+    "Snippets",
+    "Other"
+  ],
+  "keywords": [
+    "ai",
+    "copilot",
+    "intelligence",
+    "collective",
+    "patterns"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "mindhive.ask",
+        "title": "Ask Hive Mind",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.chat",
+        "title": "Open Chat",
+        "category": "Hive Mind",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "mindhive.inlineChat",
+        "title": "Inline Chat",
+        "category": "Hive Mind",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "mindhive.quickEdit",
+        "title": "Quick Edit",
+        "category": "Hive Mind",
+        "icon": "$(wand)"
+      },
+      {
+        "command": "mindhive.terminalCommand",
+        "title": "Run Terminal Command",
+        "category": "Hive Mind",
+        "icon": "$(terminal)"
+      },
+      {
+        "command": "mindhive.explainCommand",
+        "title": "Explain Terminal Command",
+        "category": "Hive Mind",
+        "icon": "$(question)"
+      },
+      {
+        "command": "mindhive.commandHistory",
+        "title": "Command History",
+        "category": "Hive Mind",
+        "icon": "$(history)"
+      },
+      {
+        "command": "mindhive.buildSequence",
+        "title": "Build Command Sequence",
+        "category": "Hive Mind",
+        "icon": "$(list-ordered)"
+      },
+      {
+        "command": "mindhive.agentMode",
+        "title": "🤖 Agent Mode - Full Autonomous Execution",
+        "category": "Hive Mind",
+        "icon": "$(robot)"
+      },
+      {
+        "command": "mindhive.agentQuick",
+        "title": "⚡ Quick Agent Task (No Approval)",
+        "category": "Hive Mind",
+        "icon": "$(zap)"
+      },
+      {
+        "command": "mindhive.showAgentPanel",
+        "title": "Show Agent Status",
+        "category": "Hive Mind",
+        "icon": "$(info)"
+      },
+      {
+        "command": "mindhive.agentCapabilities",
+        "title": "View Agent Capabilities",
+        "category": "Hive Mind",
+        "icon": "$(list-flat)"
+      },
+      {
+        "command": "mindhive.openPreview",
+        "title": "🌐 Open Browser Preview",
+        "category": "Hive Mind",
+        "icon": "$(browser)"
+      },
+      {
+        "command": "mindhive.openPreviewExternal",
+        "title": "Open Preview in External Browser",
+        "category": "Hive Mind",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "mindhive.refreshPreview",
+        "title": "Refresh Preview",
+        "category": "Hive Mind",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "mindhive.selectPort",
+        "title": "Select Preview Port",
+        "category": "Hive Mind",
+        "icon": "$(wrench)"
+      },
+      {
+        "command": "mindhive.screenshotPreview",
+        "title": "Screenshot Preview",
+        "category": "Hive Mind",
+        "icon": "$(device-camera)"
+      },
+      {
+        "command": "mindhive.showPreviewOptions",
+        "title": "Browser Preview Options",
+        "category": "Hive Mind",
+        "icon": "$(ellipsis)"
+      },
+      {
+        "command": "mindhive.deploy",
+        "title": "🚀 Deploy (One-Click)",
+        "category": "Hive Mind",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "mindhive.deployToVercel",
+        "title": "Deploy to Vercel",
+        "category": "Hive Mind",
+        "icon": "$(globe)"
+      },
+      {
+        "command": "mindhive.deployToNetlify",
+        "title": "Deploy to Netlify",
+        "category": "Hive Mind",
+        "icon": "$(cloud)"
+      },
+      {
+        "command": "mindhive.deployToRailway",
+        "title": "Deploy to Railway",
+        "category": "Hive Mind",
+        "icon": "$(server)"
+      },
+      {
+        "command": "mindhive.showDeploymentPanel",
+        "title": "Show Deployment Panel",
+        "category": "Hive Mind",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "mindhive.deploymentHistory",
+        "title": "Deployment History",
+        "category": "Hive Mind",
+        "icon": "$(history)"
+      },
+      {
+        "command": "mindhive.configureDeploymentTokens",
+        "title": "Configure Deployment Tokens",
+        "category": "Hive Mind",
+        "icon": "$(key)"
+      },
+      {
+        "command": "mindhive.showDeploymentOptions",
+        "title": "Deployment Options",
+        "category": "Hive Mind",
+        "icon": "$(ellipsis)"
+      },
+      {
+        "command": "mindhive.startCollaboration",
+        "title": "👥 Start Collaboration Session",
+        "category": "Hive Mind",
+        "icon": "$(radio-tower)"
+      },
+      {
+        "command": "mindhive.joinCollaboration",
+        "title": "Join Collaboration Session",
+        "category": "Hive Mind",
+        "icon": "$(plug)"
+      },
+      {
+        "command": "mindhive.leaveCollaboration",
+        "title": "Leave Collaboration Session",
+        "category": "Hive Mind",
+        "icon": "$(debug-disconnect)"
+      },
+      {
+        "command": "mindhive.showCollabPanel",
+        "title": "Show Collaboration Panel",
+        "category": "Hive Mind",
+        "icon": "$(organization)"
+      },
+      {
+        "command": "mindhive.shareSession",
+        "title": "Share Session Link",
+        "category": "Hive Mind",
+        "icon": "$(link)"
+      },
+      {
+        "command": "mindhive.showParticipants",
+        "title": "Show Participants",
+        "category": "Hive Mind",
+        "icon": "$(account)"
+      },
+      {
+        "command": "mindhive.toggleAICollaborator",
+        "title": "Toggle AI Collaborator",
+        "category": "Hive Mind",
+        "icon": "$(robot)"
+      },
+      {
+        "command": "mindhive.createComment",
+        "title": "Create Comment Thread",
+        "category": "Hive Mind",
+        "icon": "$(comment)"
+      },
+      {
+        "command": "mindhive.showComments",
+        "title": "Show All Comments",
+        "category": "Hive Mind",
+        "icon": "$(comment-discussion)"
+      },
+      {
+        "command": "mindhive.resolveThread",
+        "title": "Resolve Comment Thread",
+        "category": "Hive Mind",
+        "icon": "$(check)"
+      },
+      {
+        "command": "mindhive.syncNow",
+        "title": "Force Sync Now",
+        "category": "Hive Mind",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "mindhive.collabSettings",
+        "title": "Collaboration Settings",
+        "category": "Hive Mind",
+        "icon": "$(settings-gear)"
+      },
+      {
+        "command": "mindhive.generateCode",
+        "title": "Generate Code",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.verifyCode",
+        "title": "Verify with Nexus",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.optimizeCode",
+        "title": "Optimize Selection",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.fixBug",
+        "title": "Fix Bug",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.timeTravelDebug",
+        "title": "🕰️ Time-Travel Debug Error",
+        "category": "Hive Mind",
+        "icon": "$(debug-alt)"
+      },
+      {
+        "command": "mindhive.showInsights",
+        "title": "Show Global Insights",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.toggleHUD",
+        "title": "Toggle Code Quality HUD",
+        "category": "Hive Mind",
+        "icon": "$(dashboard)"
+      },
+      {
+        "command": "mindhive.login",
+        "title": "Sign In",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.logout",
+        "title": "Sign Out",
+        "category": "Hive Mind"
+      },
+      {
+        "command": "mindhive.openSettings",
+        "title": "Open Settings",
+        "category": "Hive Mind"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "hivemind",
+          "title": "Hive Mind",
+          "icon": "assets/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "hivemind": [
+        {
+          "id": "mindhive.chatView",
+          "name": "Chat",
+          "type": "webview",
+          "icon": "$(comment-discussion)",
+          "contextualTitle": "MindHive Chat"
+        },
+        {
+          "id": "mindhive.insights",
+          "name": "Global Insights",
+          "icon": "assets/icon.svg",
+          "contextualTitle": "Hive Mind Insights"
+        },
+        {
+          "id": "mindhive.agents",
+          "name": "AI Agents",
+          "icon": "assets/icon.svg",
+          "contextualTitle": "Agent Status"
+        },
+        {
+          "id": "mindhive.alerts",
+          "name": "Self-Healing Alerts",
+          "icon": "assets/icon.svg",
+          "contextualTitle": "Security & Healing"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Hive Mind",
+      "properties": {
+        "mindhive.apiUrl": {
+          "type": "string",
+          "default": "http://localhost:3000",
+          "description": "Hive Mind API URL"
+        },
+        "mindhive.wsUrl": {
+          "type": "string",
+          "default": "ws://localhost:3000",
+          "description": "WebSocket URL"
+        },
+        "mindhive.nexusStrictness": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ],
+          "default": "high",
+          "description": "Nexus verification strictness level"
+        },
+        "mindhive.showInlineInsights": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show inline global intelligence insights"
+        },
+        "mindhive.predictiveMode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable predictive coding assistant"
+        },
+        "mindhive.autoFix": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically apply high-confidence fixes"
+        },
+        "mindhive.preferredModels": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "openai",
+              "anthropic",
+              "google",
+              "grok",
+              "ollama"
+            ]
+          },
+          "default": [
+            "anthropic",
+            "openai"
+          ],
+          "description": "Preferred AI models for code generation"
+        },
+        "mindhive.preview.customPorts": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "default": [],
+          "description": "Custom ports to scan for development servers"
+        },
+        "mindhive.preview.autoReload": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable hot reload for browser preview"
+        },
+        "mindhive.preview.reloadDelay": {
+          "type": "number",
+          "default": 300,
+          "description": "Debounce delay in milliseconds before reloading preview"
+        },
+        "mindhive.preview.deviceEmulation": {
+          "type": "string",
+          "enum": [
+            "desktop",
+            "mobile",
+            "tablet"
+          ],
+          "default": "desktop",
+          "description": "Default device emulation mode for preview"
+        },
+        "mindhive.deployment.vercelToken": {
+          "type": "string",
+          "default": "",
+          "description": "Vercel API access token"
+        },
+        "mindhive.deployment.netlifyToken": {
+          "type": "string",
+          "default": "",
+          "description": "Netlify API access token"
+        },
+        "mindhive.deployment.railwayToken": {
+          "type": "string",
+          "default": "",
+          "description": "Railway API access token"
+        },
+        "mindhive.deployment.autoBuild": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically run build before deployment"
+        },
+        "mindhive.deployment.defaultPlatform": {
+          "type": "string",
+          "enum": [
+            "vercel",
+            "netlify",
+            "railway",
+            "auto"
+          ],
+          "default": "auto",
+          "description": "Default deployment platform (auto-detect if 'auto')"
+        },
+        "mindhive.collaboration.enableWebRTC": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable WebRTC peer-to-peer collaboration"
+        },
+        "mindhive.collaboration.enableIndexedDB": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable local persistence with IndexedDB"
+        },
+        "mindhive.collaboration.showCursors": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show collaborator cursors in real-time"
+        },
+        "mindhive.collaboration.showSelections": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show collaborator selections in real-time"
+        },
+        "mindhive.collaboration.showNameplates": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show name labels above collaborator cursors"
+        },
+        "mindhive.collaboration.enableAI": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable AI collaborator features"
+        },
+        "mindhive.collaboration.maxParticipants": {
+          "type": "number",
+          "default": 20,
+          "description": "Maximum number of participants in a session"
+        },
+        "mindhive.collaboration.idleTimeout": {
+          "type": "number",
+          "default": 30000,
+          "description": "Idle timeout in milliseconds (default: 30 seconds)"
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "mindhive.openPreview",
+        "key": "ctrl+shift+p",
+        "mac": "cmd+shift+p",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mindhive.refreshPreview",
+        "key": "ctrl+alt+r",
+        "mac": "cmd+alt+r"
+      },
+      {
+        "command": "mindhive.ask",
+        "key": "ctrl+shift+h",
+        "mac": "cmd+shift+h"
+      },
+      {
+        "command": "mindhive.inlineChat",
+        "key": "ctrl+i",
+        "mac": "cmd+i",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mindhive.quickEdit",
+        "key": "ctrl+k",
+        "mac": "cmd+k",
+        "when": "editorTextFocus && !inQuickOpen"
+      },
+      {
+        "command": "mindhive.terminalCommand",
+        "key": "ctrl+shift+t",
+        "mac": "cmd+shift+t"
+      },
+      {
+        "command": "mindhive.agentMode",
+        "key": "ctrl+shift+a",
+        "mac": "cmd+shift+a"
+      },
+      {
+        "command": "mindhive.agentQuick",
+        "key": "ctrl+shift+q",
+        "mac": "cmd+shift+q",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mindhive.chat",
+        "key": "ctrl+shift+c",
+        "mac": "cmd+shift+c"
+      },
+      {
+        "command": "mindhive.generateCode",
+        "key": "ctrl+shift+g",
+        "mac": "cmd+shift+g"
+      },
+      {
+        "command": "mindhive.verifyCode",
+        "key": "ctrl+shift+v",
+        "mac": "cmd+shift+v"
+      },
+      {
+        "command": "mindhive.timeTravelDebug",
+        "key": "ctrl+shift+e",
+        "mac": "cmd+shift+e",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mindhive.deploy",
+        "key": "ctrl+shift+d",
+        "mac": "cmd+shift+d"
+      },
+      {
+        "command": "mindhive.toggleHUD",
+        "key": "ctrl+shift+h ctrl+h",
+        "mac": "cmd+shift+h cmd+h",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "mindhive.showDeploymentPanel",
+        "key": "ctrl+alt+d",
+        "mac": "cmd+alt+d"
+      },
+      {
+        "command": "mindhive.startCollaboration",
+        "key": "ctrl+shift+c",
+        "mac": "cmd+shift+c"
+      },
+      {
+        "command": "mindhive.showCollabPanel",
+        "key": "ctrl+alt+c",
+        "mac": "cmd+alt+c"
+      },
+      {
+        "command": "mindhive.createComment",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "mindhive.quickEdit",
+          "group": "hivemind@0",
+          "when": "editorHasSelection || editorTextFocus"
+        },
+        {
+          "command": "mindhive.inlineChat",
+          "group": "hivemind@1",
+          "when": "editorHasSelection || editorTextFocus"
+        },
+        {
+          "command": "mindhive.generateCode",
+          "group": "hivemind@2"
+        },
+        {
+          "command": "mindhive.verifyCode",
+          "group": "hivemind@3"
+        },
+        {
+          "command": "mindhive.optimizeCode",
+          "group": "hivemind@4"
+        },
+        {
+          "command": "mindhive.fixBug",
+          "group": "hivemind@5"
+        },
+        {
+          "command": "mindhive.timeTravelDebug",
+          "group": "hivemind@6"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "mindhive.chat",
+          "when": "view == mindhive.chatView",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
+    "watch": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --sourcemap --watch",
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/archiver": "^7.0.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "@vscode/vsce": "^2.22.0",
+    "esbuild": "^0.19.10",
+    "eslint": "^8.56.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "archiver": "^6.0.1",
+    "axios": "^1.6.2",
+    "socket.io-client": "^4.7.2",
+    "y-indexeddb": "^9.0.12",
+    "y-webrtc": "^10.3.0",
+    "yjs": "^13.6.27",
+    "zod": "^3.22.4"
+  }
+}

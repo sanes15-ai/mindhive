@@ -1,0 +1,92 @@
+{
+  "icons": {
+    "16": "./gen-assets/icon16.plasmo.png",
+    "32": "./gen-assets/icon32.plasmo.png",
+    "48": "./gen-assets/icon48.plasmo.png",
+    "64": "./gen-assets/icon64.plasmo.png",
+    "128": "./gen-assets/icon128.plasmo.png"
+  },
+  "manifest_version": 3,
+  "action": {
+    "default_icon": {
+      "16": "./gen-assets/icon16.plasmo.png",
+      "32": "./gen-assets/icon32.plasmo.png",
+      "48": "./gen-assets/icon48.plasmo.png",
+      "64": "./gen-assets/icon64.plasmo.png",
+      "128": "./gen-assets/icon128.plasmo.png"
+    },
+    "default_popup": "./popup.html"
+  },
+  "version": "1.0.0",
+  "author": "Hive Mind Team",
+  "name": "Hive Mind - AI Code Intelligence",
+  "description": "Inject collective intelligence into GitHub, Stack Overflow, ChatGPT, and Claude",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://github.com/*"
+      ],
+      "js": [
+        "..\\contents\\github.ts"
+      ],
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "https://chat.openai.com/*",
+        "https://chatgpt.com/*"
+      ],
+      "js": [
+        "static\\contents\\chatgpt.tsx"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "static\\contents\\floating-hud.tsx"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://claude.ai/*"
+      ],
+      "js": [
+        "static\\contents\\claude.tsx"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://github.com/*"
+      ],
+      "js": [
+        "static\\contents\\github.tsx"
+      ],
+      "run_at": "document_idle"
+    },
+    {
+      "matches": [
+        "https://stackoverflow.com/*",
+        "https://*.stackoverflow.com/*"
+      ],
+      "js": [
+        "static\\contents\\stackoverflow.tsx"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "host_permissions": [
+    "https://github.com/*",
+    "https://stackoverflow.com/*",
+    "https://chat.openai.com/*",
+    "https://claude.ai/*"
+  ]
+}

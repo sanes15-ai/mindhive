@@ -1,0 +1,147 @@
+# MindHive Dual License
+
+Copyright (c) 2025 Elexiz LLC  
+Built by: Abdur Rehman  
+GitHub: @sanes15-ai
+
+---
+
+## Personal & Non-Commercial Use License
+
+Permission is hereby granted, **free of charge**, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, and distribute the Software **for personal, educational, and 
+non-commercial purposes only**, subject to the following conditions:
+
+### Permitted Uses:
+✅ Personal projects and learning  
+✅ Educational and academic research  
+✅ Non-profit organizations  
+✅ Open-source contributions  
+✅ Portfolio demonstrations  
+
+### Conditions:
+1. **Attribution Required**: You must retain this license notice and provide 
+   attribution to MindHive in any derivative works or distributions.
+
+2. **Non-Commercial Only**: You may NOT use this Software for commercial purposes,
+   including but not limited to:
+   - Building commercial products or services
+   - Offering paid SaaS platforms
+   - Enterprise deployments
+   - White-label resale
+   - Consulting services using this Software
+   - Any revenue-generating activity
+
+3. **Share-Alike**: If you modify and distribute this Software, you must:
+   - Make your modifications publicly available under this same license
+   - Clearly indicate what changes you made
+   - Provide a link back to the original repository
+
+4. **No Warranty**: THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+   KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+   EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+   OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+   ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+   DEALINGS IN THE SOFTWARE.
+
+---
+
+## Commercial License
+
+**For commercial use, you MUST obtain a commercial license.**
+
+Commercial use includes, but is not limited to:
+- Using the Software in a commercial product or service
+- Building SaaS platforms or APIs for customers
+- Enterprise or production deployments
+- White-labeling or reselling the Software
+- Offering consulting or integration services
+- Any use that generates revenue directly or indirectly
+
+### How to Obtain a Commercial License:
+
+📧 **Contact:** Open a Discussion on GitHub or contact @sanes15-ai  
+📍 **Repository:** https://github.com/sanes15-ai/mindhive  
+💬 **Inquiries:** https://github.com/sanes15-ai/mindhive/discussions  
+
+Commercial licenses are available for:
+- ✅ Startups and SMBs: Affordable pricing  
+- ✅ Enterprise: Custom agreements with SLA  
+- ✅ White-label: Full rebranding rights  
+- ✅ OEM Partners: Distribution agreements  
+- ✅ Support Contracts: Priority support available  
+
+### Commercial License Benefits:
+- ✅ Full commercial usage rights
+- ✅ No attribution requirements
+- ✅ Priority support and updates
+- ✅ Custom feature development
+- ✅ Service Level Agreements (SLA)
+- ✅ Legal protection and indemnification
+
+---
+
+## Frequently Asked Questions
+
+**Q: Can I use this for my startup?**  
+A: Only if it's for internal development/testing. If you're building a product 
+   to sell or offering services to customers, you need a commercial license.
+
+**Q: Can I use this at my company?**  
+A: For internal learning/experimentation, yes. For production systems or 
+   customer-facing services, you need a commercial license.
+
+**Q: Can I contribute to this project?**  
+A: Yes! Contributions are welcome. By contributing, you agree that your 
+   contributions will be licensed under this same dual license.
+
+**Q: What if I'm not sure if my use case is commercial?**  
+A: If you're unsure, please reach out on GitHub Discussions. We're happy to 
+   clarify and work with you.
+
+**Q: Can I fork this and remove the commercial license requirement?**  
+A: No. The license terms apply to all derivative works. Removing the license 
+   or violating its terms is copyright infringement.
+
+---
+
+## Enforcement
+
+Violations of this license will result in:
+1. Immediate cease and desist notice
+2. Legal action to recover damages
+3. Permanent ban from using the Software
+4. Public disclosure of violation
+
+We reserve the right to audit use of the Software and pursue legal remedies
+for unauthorized commercial use.
+
+---
+
+## Summary
+
+| Use Case | License Required | Cost |
+|----------|-----------------|------|
+| Personal Projects | ✅ Free (this license) | $0 |
+| Learning/Education | ✅ Free (this license) | $0 |
+| Open Source Contributions | ✅ Free (this license) | $0 |
+| Internal Company Use (testing) | ✅ Free (this license) | $0 |
+| **Commercial Products** | ❌ Commercial License | Contact Us |
+| **SaaS Platforms** | ❌ Commercial License | Contact Us |
+| **Enterprise Deployments** | ❌ Commercial License | Contact Us |
+| **Consulting/Services** | ❌ Commercial License | Contact Us |
+
+---
+
+**Questions?** Open a GitHub Discussion or contact @sanes15-ai
+
+**Repository:** https://github.com/sanes15-ai/mindhive  
+**Discussions:** https://github.com/sanes15-ai/mindhive/discussions  
+**Issues:** https://github.com/sanes15-ai/mindhive/issues  
+
+---
+
+**Last Updated:** November 10, 2025  
+**License Version:** 1.0

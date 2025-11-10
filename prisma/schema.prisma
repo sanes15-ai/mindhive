@@ -1,0 +1,804 @@
+// This is your Prisma schema file
+// Learn more: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// User Management
+model User {
+  id                String              @id @default(uuid())
+  email             String              @unique
+  passwordHash      String
+  name              String?
+  tier              UserTier            @default(FREE)
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  lastActiveAt      DateTime            @default(now())
+  
+  // Relations
+  memories          Memory[]
+  behaviors         UserBehavior[]
+  securityScans     SecurityScan[]
+  teams             TeamMember[]
+  analytics         UserAnalytics?
+  preferences       UserPreferences?
+  userMemoryProfile UserMemoryProfile?
+  projectMemories   ProjectMemory[]
+  codeGenerations   CodeGeneration[]
+  
+  @@index([email])
+  @@index([tier])
+}
+
+enum UserTier {
+  FREE
+  PRO
+  TEAM
+  ENTERPRISE
+}
+
+// Developer-specific context embeddings
+model Memory {
+  id                String              @id @default(uuid())
+  userId            String
+  content           String              @db.Text
+  embedding         Float[]
+  context           Json
+  type              MemoryType
+  language          String?
+  framework         String?
+  tags              String[]
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  accessCount       Int                 @default(0)
+  lastAccessedAt    DateTime?
+  
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([type])
+  @@index([language])
+  @@index([framework])
+}
+
+enum MemoryType {
+  CODE_SNIPPET
+  SOLUTION
+  PATTERN
+  ERROR_FIX
+  OPTIMIZATION
+  SECURITY_FIX
+  DOCUMENTATION
+}
+
+// Shared proven structures across the network
+model GlobalPattern {
+  id                String              @id @default(uuid())
+  name              String
+  description       String              @db.Text
+  code              String              @db.Text
+  embedding         Float[]
+  language          String
+  framework         String?
+  category          String
+  tags              String[]
+  
+  // Usage metrics
+  usageCount        Int                 @default(0)
+  successRate       Float               @default(0)
+  avgPerformance    Float?
+  bugRate           Float               @default(0)
+  securityScore     Float               @default(0)
+  
+  // Collective intelligence
+  confidenceScore   Float               @default(0)
+  verificationCount Int                 @default(0)
+  upvotes           Int                 @default(0)
+  downvotes         Int                 @default(0)
+  
+  // Deprecation
+  isDeprecated      Boolean             @default(false)
+  deprecationReason String?
+  alternativeId     String?
+  
+  // Metadata
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  lastUsedAt        DateTime?
+  
+  verifications     PatternVerification[]
+  usageMetrics      PatternUsageMetric[]
+  
+  @@index([language])
+  @@index([framework])
+  @@index([category])
+  @@index([confidenceScore])
+  @@index([isDeprecated])
+}
+
+// Community verification for patterns
+model PatternVerification {
+  id                String              @id @default(uuid())
+  patternId         String
+  verifiedBy        String
+  outcome           VerificationOutcome
+  notes             String?
+  context           Json?
+  createdAt         DateTime            @default(now())
+  
+  pattern           GlobalPattern       @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  
+  @@index([patternId])
+  @@index([outcome])
+}
+
+enum VerificationOutcome {
+  SUCCESS
+  FAILURE
+  PARTIAL_SUCCESS
+  NEEDS_MODIFICATION
+}
+
+// Track usage metrics for patterns
+model PatternUsageMetric {
+  id                String              @id @default(uuid())
+  patternId         String
+  timestamp         DateTime            @default(now())
+  executionTime     Float?
+  memoryUsage       Float?
+  cpuUsage          Float?
+  outcome           String
+  context           Json?
+  
+  pattern           GlobalPattern       @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  
+  @@index([patternId])
+  @@index([timestamp])
+}
+
+// Developer behavior tracking for predictive intelligence
+model UserBehavior {
+  id                String              @id @default(uuid())
+  userId            String
+  actionType        ActionType
+  context           Json
+  metadata          Json?
+  outcome           String?
+  timeSpent         Int?                // milliseconds
+  timestamp         DateTime            @default(now())
+  
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([actionType])
+  @@index([timestamp])
+}
+
+enum ActionType {
+  SEARCH
+  CODE_GENERATION
+  CODE_EDIT
+  ERROR_FIX
+  OPTIMIZATION
+  SECURITY_SCAN
+  PATTERN_USAGE
+  DOCUMENTATION_VIEW
+}
+
+// Team management
+model Team {
+  id                String              @id @default(uuid())
+  name              String
+  slug              String              @unique
+  description       String?
+  plan              UserTier            @default(TEAM)
+  licenseKey        String?             @unique
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  members           TeamMember[]
+  analytics         TeamAnalytics?
+  knowledgeMap      KnowledgeMap[]
+  
+  @@index([slug])
+}
+
+model TeamMember {
+  id                String              @id @default(uuid())
+  teamId            String
+  userId            String
+  role              TeamRole            @default(MEMBER)
+  joinedAt          DateTime            @default(now())
+  
+  team              Team                @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([teamId, userId])
+  @@index([teamId])
+  @@index([userId])
+}
+
+enum TeamRole {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+// Team-level productivity and intelligence metrics
+model TeamAnalytics {
+  id                String              @id @default(uuid())
+  teamId            String              @unique
+  
+  // Productivity metrics
+  totalCommits      Int                 @default(0)
+  totalPRs          Int                 @default(0)
+  avgResponseTime   Float?              // hours
+  velocity          Float?              // story points per sprint
+  
+  // Quality metrics
+  bugRate           Float               @default(0)
+  testCoverage      Float?
+  technicalDebt     Float?              // estimated hours
+  
+  // Knowledge metrics
+  knowledgeSharingScore Float?
+  documentationScore Float?
+  
+  // Risk metrics
+  singlePointFailures Int               @default(0)
+  knowledgeGaps      Json?
+  
+  updatedAt         DateTime            @updatedAt
+  
+  team              Team                @relation(fields: [teamId], references: [id], onDelete: Cascade)
+}
+
+// Knowledge map for enterprise teams
+model KnowledgeMap {
+  id                String              @id @default(uuid())
+  teamId            String
+  domain            String
+  expertise         Json                // { userId: expertiseLevel }
+  riskLevel         String              // LOW, MEDIUM, HIGH, CRITICAL
+  documentation     String?             @db.Text
+  owners            String[]
+  lastUpdated       DateTime            @updatedAt
+  createdAt         DateTime            @default(now())
+  
+  team              Team                @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  
+  @@index([teamId])
+  @@index([riskLevel])
+}
+
+// Security vulnerability scanning
+model SecurityScan {
+  id                String              @id @default(uuid())
+  userId            String
+  scanType          ScanType
+  targetCode        String              @db.Text
+  vulnerabilities   Json[]              // Array of vulnerability objects
+  riskLevel         RiskLevel
+  autoFixAvailable  Boolean             @default(false)
+  fixCode           String?             @db.Text
+  fixApplied        Boolean             @default(false)
+  confidenceScore   Float
+  createdAt         DateTime            @default(now())
+  
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([riskLevel])
+  @@index([createdAt])
+}
+
+enum ScanType {
+  INJECTION
+  XSS
+  CSRF
+  AUTH_BYPASS
+  CRYPTO_WEAKNESS
+  DEPENDENCY_VULNERABILITY
+  CODE_INJECTION
+  PATH_TRAVERSAL
+  DOS
+  MEMORY_LEAK
+  RACE_CONDITION
+  FULL_SCAN
+}
+
+enum RiskLevel {
+  CRITICAL
+  HIGH
+  MEDIUM
+  LOW
+  INFO
+}
+
+// Collective intelligence aggregation
+model CollectiveIntelligence {
+  id                String              @id @default(uuid())
+  topic             String
+  category          String
+  language          String?
+  framework         String?
+  
+  // Aggregated data
+  totalContributors Int                 @default(0)
+  totalUsage        Int                 @default(0)
+  avgConfidence     Float               @default(0)
+  successRate       Float               @default(0)
+  
+  // Insights
+  insights          Json
+  recommendations   Json
+  alternatives      Json[]
+  
+  // Trending data
+  trendingScore     Float               @default(0)
+  lastTrendUpdate   DateTime            @default(now())
+  
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  
+  @@index([category])
+  @@index([language])
+  @@index([framework])
+  @@index([trendingScore])
+}
+
+// User analytics and personalization
+model UserAnalytics {
+  id                String              @id @default(uuid())
+  userId            String              @unique
+  
+  // Activity metrics
+  totalSearches     Int                 @default(0)
+  totalGenerations  Int                 @default(0)
+  totalFixes        Int                 @default(0)
+  
+  // Performance metrics
+  avgResponseTime   Float?
+  successRate       Float               @default(0)
+  productivityScore Float?
+  
+  // Learning metrics
+  skillProgress     Json?
+  preferredLanguages String[]
+  preferredFrameworks String[]
+  
+  // Style learning
+  codingStyle       Json?               // Learned patterns from Git history
+  conventionPrefs   Json?
+  
+  updatedAt         DateTime            @updatedAt
+  
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// User preferences
+model UserPreferences {
+  id                String              @id @default(uuid())
+  userId            String              @unique
+  
+  // AI preferences
+  preferredAIModel  String?
+  codeStyle         String?
+  verbosity         String              @default("NORMAL")
+  
+  // Privacy settings
+  sharePatterns     Boolean             @default(true)
+  anonymousSharing  Boolean             @default(true)
+  
+  // Notifications
+  notifyOnFixes     Boolean             @default(true)
+  notifyOnInsights  Boolean             @default(true)
+  
+  // Feature flags
+  enableAutonomous  Boolean             @default(false)
+  enableSelfHealing Boolean             @default(true)
+  enablePredictive  Boolean             @default(true)
+  
+  // MEMORY LEARNING CONSENT
+  enableLearning    Boolean             @default(false)
+  learningConsentDate DateTime?
+  
+  settings          Json?
+  
+  updatedAt         DateTime            @updatedAt
+  
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ============================================
+// LAYER 1: USER MEMORY PROFILE (Cross-Project)
+// ============================================
+model UserMemoryProfile {
+  id                String              @id @default(uuid())
+  userId            String              @unique
+  
+  // Coding Style Learned from All Projects
+  preferredLanguages String[]           @default([])
+  preferredFrameworks String[]          @default([])
+  namingConventions  Json?              // { variables: "camelCase", functions: "verbNoun" }
+  architectureStyle  String?            // "MVC", "Clean Architecture", "Microservices"
+  
+  // Pattern Preferences
+  preferredPatterns  Json[]             // Array of pattern IDs user frequently uses
+  avoidedPatterns    Json[]             // Patterns user rejects/edits often
+  
+  // Learning Stats
+  totalGenerations   Int                @default(0)
+  acceptanceRate     Float              @default(0)
+  editRate           Float              @default(0)  // How often user edits generated code
+  
+  // Improvement Over Time
+  accuracyTrend      Json?              // Time-series data of accuracy improvements
+  learningVelocity   Float              @default(0)  // How fast AI is learning user's style
+  
+  // Last Updated
+  lastLearningUpdate DateTime           @default(now())
+  createdAt          DateTime           @default(now())
+  
+  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+}
+
+// ============================================
+// LAYER 2: PROJECT MEMORY (Per-Folder Context)
+// ============================================
+model ProjectMemory {
+  id                String              @id @default(uuid())
+  userId            String
+  
+  // Project Identification
+  projectPath       String              // Full path: "d:/Projects/Ecommerce"
+  projectName       String              // User-friendly name
+  
+  // Chat History
+  chatMessages      ChatMessage[]
+  
+  // File Context
+  indexedFiles      Json[]             // Array of { path, lastModified, summary }
+  dependencyGraph   Json?              // Project structure graph
+  
+  // Project-Specific Learning
+  projectPatterns   Json[]             // Patterns specific to this project
+  conventions       Json?              // Naming conventions used in THIS project
+  
+  // Metadata
+  lastAccessed      DateTime           @default(now())
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  generations       CodeGeneration[]
+  
+  @@unique([userId, projectPath])
+  @@index([userId])
+  @@index([projectPath])
+}
+
+// Chat messages per project
+model ChatMessage {
+  id                String             @id @default(uuid())
+  projectMemoryId   String
+  
+  role              String             // "user" | "assistant" | "system"
+  content           String             @db.Text
+  metadata          Json?              // Code snippets, file references, etc.
+  
+  timestamp         DateTime           @default(now())
+  
+  projectMemory     ProjectMemory      @relation(fields: [projectMemoryId], references: [id], onDelete: Cascade)
+  
+  @@index([projectMemoryId])
+  @@index([timestamp])
+}
+
+// Code generations (all code ever generated)
+model CodeGeneration {
+  id                String             @id @default(uuid())
+  userId            String
+  projectMemoryId   String?
+  
+  // Input
+  prompt            String             @db.Text
+  language          String
+  framework         String?
+  context           Json?              // Relevant files, chat history
+  
+  // Output
+  generatedCode     String             @db.Text
+  explanation       String?            @db.Text
+  
+  // Verification
+  nexusScore        Float?             // NEXUS verification score
+  testsPassed       Boolean?
+  securityClean     Boolean?
+  
+  // User Feedback
+  userAccepted      Boolean?
+  userEdited        Boolean            @default(false)
+  userEditedCode    String?            @db.Text
+  userRating        Int?               // 1-5 stars
+  
+  // Learning
+  patternExtracted  Boolean            @default(false)
+  extractedPatterns String[]           @default([])
+  
+  // Metadata
+  generationTime    Int?               // milliseconds
+  modelUsed         String?            // "gpt-4" | "claude-3" | "gemini-pro"
+  createdAt         DateTime           @default(now())
+  
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectMemory     ProjectMemory?     @relation(fields: [projectMemoryId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([projectMemoryId])
+  @@index([language])
+  @@index([createdAt])
+}
+
+// ============================================
+// LAYER 3: UNIVERSAL LEARNING (Already exists as GlobalPattern)
+// Extended with more learning capabilities
+// ============================================
+
+// Agent activity logs
+model AgentActivity {
+  id                String              @id @default(uuid())
+  agentType         AgentType
+  action            String
+  targetId          String?
+  input             Json?
+  output            Json?
+  confidenceScore   Float?
+  success           Boolean
+  errorMessage      String?
+  executionTime     Int                 // milliseconds
+  createdAt         DateTime            @default(now())
+  
+  @@index([agentType])
+  @@index([createdAt])
+  @@index([success])
+}
+
+enum AgentType {
+  CODEGEN
+  SENTINEL
+  OPTIMIZER
+  SECURITY_GUARD
+  ORACLE
+  NEXUS
+}
+
+// Self-healing incidents
+model HealingIncident {
+  id                String              @id @default(uuid())
+  detectedAt        DateTime            @default(now())
+  resolvedAt        DateTime?
+  status            IncidentStatus      @default(DETECTED)
+  
+  // Problem details
+  errorType         String
+  errorMessage      String              @db.Text
+  stackTrace        String?             @db.Text
+  affectedCode      String              @db.Text
+  
+  // Solution
+  proposedFix       String?             @db.Text
+  appliedFix        String?             @db.Text
+  fixConfidence     Float?
+  
+  // Verification
+  testsPassed       Boolean?
+  deploymentStatus  String?
+  rollbackRequired  Boolean             @default(false)
+  
+  metadata          Json?
+  
+  @@index([status])
+  @@index([detectedAt])
+}
+
+enum IncidentStatus {
+  DETECTED
+  ANALYZING
+  FIX_PROPOSED
+  TESTING
+  DEPLOYED
+  VERIFIED
+  FAILED
+  ROLLED_BACK
+}
+
+// UI Session Tracking
+model UISession {
+  id                String              @id @default(uuid())
+  userId            String?
+  sessionId         String              @unique
+  platform          UIPlatform
+  startedAt         DateTime            @default(now())
+  endedAt           DateTime?
+  events            UIEvent[]
+  metadata          Json?
+  
+  @@index([userId])
+  @@index([platform])
+  @@index([startedAt])
+}
+
+enum UIPlatform {
+  VSCODE
+  WEB_DASHBOARD
+  CHROME_EXTENSION
+}
+
+// UI Event Tracking
+model UIEvent {
+  id                String              @id @default(uuid())
+  sessionId         String
+  session           UISession           @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  eventType         String
+  eventData         Json?
+  timestamp         DateTime            @default(now())
+  url               String?
+  
+  @@index([sessionId])
+  @@index([eventType])
+  @@index([timestamp])
+}
+
+// Time-Travel Debugging System
+
+// Unique error patterns identified across all users
+model ErrorPattern {
+  id                String              @id @default(uuid())
+  signature         String              @unique // Unique hash of error type + key stack frames
+  errorType         String              // TypeError, ReferenceError, etc.
+  errorMessage      String              @db.Text
+  normalizedStack   String              @db.Text // Stack trace with variables/paths normalized
+  language          String              // javascript, typescript, python, etc.
+  framework         String?
+  category          ErrorCategory
+  
+  // Statistics
+  occurrenceCount   Int                 @default(0)
+  resolutionCount   Int                 @default(0) // How many times it was fixed
+  successRate       Float               @default(0) // % of fixes that worked
+  avgTimeToFix      Int?                // Average milliseconds to fix
+  severity          ErrorSeverity       @default(MEDIUM)
+  
+  // Metadata
+  firstSeen         DateTime            @default(now())
+  lastSeen          DateTime            @default(now())
+  tags              String[]
+  
+  // Relations
+  occurrences       ErrorOccurrence[]
+  resolutions       ErrorResolution[]
+  
+  @@index([signature])
+  @@index([errorType])
+  @@index([language])
+  @@index([successRate])
+  @@index([occurrenceCount])
+}
+
+enum ErrorCategory {
+  NULL_REFERENCE
+  TYPE_ERROR
+  SYNTAX_ERROR
+  LOGIC_ERROR
+  ASYNC_ERROR
+  DEPENDENCY_ERROR
+  CONFIGURATION_ERROR
+  SECURITY_ERROR
+  PERFORMANCE_ERROR
+  OTHER
+}
+
+enum ErrorSeverity {
+  CRITICAL  // Production crash, data loss
+  HIGH      // Major functionality broken
+  MEDIUM    // Feature doesn't work
+  LOW       // Minor issue, cosmetic
+}
+
+// Individual error occurrences from users
+model ErrorOccurrence {
+  id                String              @id @default(uuid())
+  patternId         String
+  pattern           ErrorPattern        @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  userId            String?
+  
+  // Context
+  fullErrorLog      String              @db.Text
+  stackTrace        String              @db.Text
+  codeSnippet       String?             @db.Text // Code around the error
+  filePath          String?
+  lineNumber        Int?
+  environment       String?             // development, staging, production
+  
+  // Resolution tracking
+  resolved          Boolean             @default(false)
+  resolutionId      String?
+  resolution        ErrorResolution?    @relation(fields: [resolutionId], references: [id])
+  timeToResolve     Int?                // milliseconds
+  
+  // Metadata
+  timestamp         DateTime            @default(now())
+  metadata          Json?               // Additional context
+  
+  @@index([patternId])
+  @@index([resolved])
+  @@index([timestamp])
+}
+
+// Proven fixes for error patterns
+model ErrorResolution {
+  id                String              @id @default(uuid())
+  patternId         String
+  pattern           ErrorPattern        @relation(fields: [patternId], references: [id], onDelete: Cascade)
+  
+  // Fix details
+  fixType           FixType
+  fixDescription    String              @db.Text
+  codeChanges       Json                // Array of {file, before, after}
+  explanation       String              @db.Text // Why this fix works
+  
+  // Effectiveness
+  appliedCount      Int                 @default(0) // How many times used
+  successCount      Int                 @default(0) // How many times it worked
+  successRate       Float               @default(0) // successCount / appliedCount
+  avgFixTime        Int?                // Average time to apply (milliseconds)
+  
+  // Confidence
+  confidenceScore   Float               @default(0) // 0-1 based on success rate + sample size
+  verifiedBy        Int                 @default(0) // Number of developers who verified it works
+  
+  // AI-generated or human-submitted
+  source            ResolutionSource
+  aiModel           String?             // Which AI model generated it
+  contributorId     String?             // User who submitted it
+  
+  // Metadata
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  tags              String[]
+  
+  // Relations
+  occurrences       ErrorOccurrence[]
+  
+  @@index([patternId])
+  @@index([successRate])
+  @@index([confidenceScore])
+}
+
+enum FixType {
+  NULL_CHECK
+  TYPE_CONVERSION
+  ASYNC_AWAIT
+  TRY_CATCH
+  DEPENDENCY_UPDATE
+  CONFIG_CHANGE
+  REFACTOR
+  OTHER
+}
+
+enum ResolutionSource {
+  AI_GENERATED
+  HUMAN_SUBMITTED
+  HYBRID // AI-generated, human-verified
+}
