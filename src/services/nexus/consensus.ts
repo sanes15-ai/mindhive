@@ -15,6 +15,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AppError } from '../../middleware/errorHandler';
 import { logger } from '../../utils/logger';
+import { prisma } from '../../index';
 
 // Model configurations
 const openai = new OpenAI({
@@ -64,6 +65,8 @@ export class NexusConsensus {
       language,
     });
 
+    const startTime = Date.now();
+
     try {
       // Call all models in parallel
       const responses = await Promise.allSettled([
@@ -83,6 +86,17 @@ export class NexusConsensus {
 
       // Calculate consensus
       const consensusResult = await this.calculateConsensus(modelResponses);
+
+      // Track statistics in database
+      const totalLatency = Date.now() - startTime;
+      await this.trackStatistics(
+        prompt,
+        language,
+        consensusResult,
+        modelResponses,
+        totalLatency,
+        context
+      );
 
       logger.info('🛡️ NEXUS: Consensus reached', {
         decision: consensusResult.decision,
@@ -392,18 +406,145 @@ export class NexusConsensus {
   }
 
   /**
-   * Get consensus statistics
+   * Track consensus statistics in database
    */
-  async getStatistics() {
-    // TODO: Implement statistics tracking in database
-    return {
-      totalRequests: 0,
-      consensusRate: 0,
-      votingRate: 0,
-      fallbackRate: 0,
-      avgAgreement: 0,
-      avgConfidence: 0,
-    };
+  private async trackStatistics(
+    prompt: string,
+    language: string,
+    consensusResult: ConsensusResult,
+    modelResponses: ModelResponse[],
+    totalLatency: number,
+    context?: any
+  ): Promise<void> {
+    try {
+      const openaiResponse = modelResponses.find((r) => r.provider === 'openai');
+      const claudeResponse = modelResponses.find((r) => r.provider === 'anthropic');
+      const geminiResponse = modelResponses.find((r) => r.provider === 'google');
+
+      const totalTokens = modelResponses.reduce(
+        (sum, r) => sum + r.tokensUsed,
+        0
+      );
+
+      await prisma.consensusStatistic.create({
+        data: {
+          prompt: prompt.substring(0, 1000), // Truncate for storage
+          language,
+          decision: consensusResult.decision.toUpperCase() as any,
+          agreement: consensusResult.agreement,
+          finalConfidence: consensusResult.confidence,
+          openaiResponse: !!openaiResponse,
+          claudeResponse: !!claudeResponse,
+          geminiResponse: !!geminiResponse,
+          openaiLatency: openaiResponse?.latency,
+          claudeLatency: claudeResponse?.latency,
+          geminiLatency: geminiResponse?.latency,
+          totalLatency,
+          tokensUsed: totalTokens,
+          userId: context?.userId,
+          context: context ? JSON.parse(JSON.stringify(context)) : undefined,
+          tags: context?.tags || [],
+        },
+      });
+
+      logger.debug('🛡️ NEXUS: Statistics tracked', {
+        decision: consensusResult.decision,
+        totalLatency,
+        tokensUsed: totalTokens,
+      });
+    } catch (error) {
+      // Don't fail the request if statistics tracking fails
+      logger.error('🛡️ NEXUS: Failed to track statistics', { error });
+    }
+  }
+
+  /**
+   * Get consensus statistics from database
+   */
+  async getStatistics(filter?: {
+    language?: string;
+    userId?: string;
+    startDate?: Date;
+    endDate?: Date;
+  }) {
+    try {
+      const where: any = {};
+      if (filter?.language) where.language = filter.language;
+      if (filter?.userId) where.userId = filter.userId;
+      if (filter?.startDate || filter?.endDate) {
+        where.requestTimestamp = {};
+        if (filter.startDate) where.requestTimestamp.gte = filter.startDate;
+        if (filter.endDate) where.requestTimestamp.lte = filter.endDate;
+      }
+
+      const [total, stats] = await Promise.all([
+        prisma.consensusStatistic.count({ where }),
+        prisma.consensusStatistic.groupBy({
+          by: ['decision'],
+          where,
+          _count: true,
+          _avg: {
+            agreement: true,
+            finalConfidence: true,
+            totalLatency: true,
+            tokensUsed: true,
+          },
+        }),
+      ]);
+
+      const consensusCount =
+        stats.find((s) => s.decision === 'CONSENSUS')?._count || 0;
+      const votingCount =
+        stats.find((s) => s.decision === 'VOTING')?._count || 0;
+      const fallbackCount =
+        stats.find((s) => s.decision === 'FALLBACK')?._count || 0;
+
+      const avgAgreement =
+        stats.reduce((sum, s) => sum + (s._avg.agreement || 0), 0) /
+          stats.length || 0;
+      const avgConfidence =
+        stats.reduce((sum, s) => sum + (s._avg.finalConfidence || 0), 0) /
+          stats.length || 0;
+      const avgLatency =
+        stats.reduce((sum, s) => sum + (s._avg.totalLatency || 0), 0) /
+          stats.length || 0;
+      const avgTokens =
+        stats.reduce((sum, s) => sum + (s._avg.tokensUsed || 0), 0) /
+          stats.length || 0;
+
+      return {
+        totalRequests: total,
+        consensusRate: total > 0 ? consensusCount / total : 0,
+        votingRate: total > 0 ? votingCount / total : 0,
+        fallbackRate: total > 0 ? fallbackCount / total : 0,
+        avgAgreement,
+        avgConfidence,
+        avgLatency,
+        avgTokens,
+        breakdown: {
+          consensus: consensusCount,
+          voting: votingCount,
+          fallback: fallbackCount,
+        },
+      };
+    } catch (error) {
+      logger.error('🛡️ NEXUS: Failed to get statistics', { error });
+      return {
+        totalRequests: 0,
+        consensusRate: 0,
+        votingRate: 0,
+        fallbackRate: 0,
+        avgAgreement: 0,
+        avgConfidence: 0,
+        avgLatency: 0,
+        avgTokens: 0,
+        breakdown: {
+          consensus: 0,
+          voting: 0,
+          fallback: 0,
+        },
+      };
+    }
   }
 }
 

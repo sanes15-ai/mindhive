@@ -321,10 +321,7 @@ router.post(
   asyncHandler(async (req: AuthRequest, res) => {
     const { query, limit = 10 } = req.body;
 
-    // Generate query embedding
-    const queryEmbedding = await aiOrchestrator.generateEmbedding(query);
-
-    // In production, use Pinecone for vector search
+    // In production, use Pinecone for vector search with embeddings
     // For now, simple keyword search
     const memories = await prisma.memory.findMany({
       where: {
@@ -397,10 +394,8 @@ router.get(
       return res.status(400).json({ error: 'Query parameter is required' });
     }
 
-    // Generate embedding for the search query
-    const queryEmbedding = await aiOrchestrator.generateEmbedding(query as string);
-
-    // Search memories (simplified - in production, use vector similarity search)
+    // In production, use vector similarity search with embeddings
+    // For now, simple keyword search
     const whereClause: any = {
       userId: req.user!.id,
     };

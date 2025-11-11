@@ -10,7 +10,7 @@ router.get(
   '/global-patterns',
   optionalAuth,
   asyncHandler(async (req: AuthRequest, res: any) => {
-    const { intent, language, framework, category, limit = 20, offset = 0 } = req.query;
+    const { language, framework, category, limit = 20, offset = 0 } = req.query;
 
     const where: any = {
       isDeprecated: false,
@@ -81,9 +81,9 @@ router.post(
   '/predict-success',
   authMiddleware,
   asyncHandler(async (req: AuthRequest, res: any) => {
-    const { code, language, framework, context } = req.body;
+    const { language, framework } = req.body;
 
-    // Find similar patterns
+    // Find similar patterns (in production, use more sophisticated analysis)
     const similarPatterns = await prisma.globalPattern.findMany({
       where: {
         language,

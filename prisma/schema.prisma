@@ -802,3 +802,51 @@ enum ResolutionSource {
   HUMAN_SUBMITTED
   HYBRID // AI-generated, human-verified
 }
+
+// NEXUS Consensus Statistics
+model ConsensusStatistic {
+  id                String              @id @default(uuid())
+  
+  // Request details
+  prompt            String              @db.Text
+  language          String
+  requestTimestamp  DateTime            @default(now())
+  
+  // Decision made
+  decision          ConsensusDecision
+  agreement         Float               // 0-1 scale
+  finalConfidence   Float               // 0-1 scale
+  
+  // Model responses
+  openaiResponse    Boolean             @default(false)
+  claudeResponse    Boolean             @default(false)
+  geminiResponse    Boolean             @default(false)
+  openaiLatency     Int?                // milliseconds
+  claudeLatency     Int?                // milliseconds
+  geminiLatency     Int?                // milliseconds
+  
+  // Performance metrics
+  totalLatency      Int                 // milliseconds
+  tokensUsed        Int                 @default(0)
+  
+  // Quality metrics
+  verifiedCorrect   Boolean?            // User verification
+  bugReported       Boolean             @default(false)
+  
+  // Metadata
+  userId            String?
+  context           Json?
+  tags              String[]
+  
+  @@index([decision])
+  @@index([language])
+  @@index([requestTimestamp])
+  @@index([agreement])
+  @@index([finalConfidence])
+}
+
+enum ConsensusDecision {
+  CONSENSUS        // All models agreed
+  VOTING           // Models disagreed, used voting
+  FALLBACK         // Only one model responded
+}

@@ -4,39 +4,69 @@
 [![Node](https://img.shields.io/badge/node-%3E%3D20.0.0-brightgreen.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.5.2-blue.svg)](https://www.typescriptlang.org/)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![CI](https://github.com/sanes15-ai/mindhive/workflows/CI/badge.svg)](https://github.com/sanes15-ai/mindhive/actions)
 
 > **The World's First Collective Code Intelligence Platform** combining 6 AI models (OpenAI, Anthropic, Google, Grok, Ollama) with NEXUS anti-hallucination engine, Time-Travel Debugging, and 5 autonomous AI agents.
 
 **Built by:** Abdur Rehman ([@sanes15-ai](https://github.com/sanes15-ai))  
 **Company:** Elexiz LLC  
-**Status:** 🚧 **70% Complete** - Backend production-ready, frontend in progress
+**Status:** 🚀 **Backend Production-Ready (95%)** - Infrastructure complete, frontend in progress
+
+---
+
+## 🎯 Quick Links
+
+- **[Quick Start Guide](QUICK_START.md)** - Get started in 5 minutes
+- **[API Documentation](API_DOCS.md)** - Complete API reference
+- **[CI/CD Guide](CI_CD_DOCS.md)** - GitHub Actions workflows
+- **[Deployment Guide](DEPLOYMENT.md)** - Multi-platform deployment
+- **[Troubleshooting](TROUBLESHOOTING.md)** - Common issues & solutions
+
+---
+
+## ⚡ Quick Start
+
+```bash
+# Interactive setup wizard (recommended)
+npm run setup-wizard
+
+# Or manual setup
+npm install
+cp .env.example .env
+# Edit .env with your configuration
+npm run db:migrate
+npm run dev
+```
+
+Server starts at: `http://localhost:3000`
 
 ---
 
 ## ⚠️ Current Status
 
-**What Works Right Now:**
-- ✅ Backend API (95%) - 72+ endpoints, production-ready
-- ✅ Multi-AI Integration (90%) - 5 providers ready
-- ✅ NEXUS Engine (85%) - Anti-hallucination system operational
-- ✅ AI Agents (80%) - 5 specialized agents functional
-- ✅ Time-Travel Debugging Backend (95%) - API complete
-- ✅ Database Schema (90%) - Prisma models ready
-- ✅ Docker Deployment (85%) - One-command setup
+**Backend Infrastructure: Production-Ready (95%)**
+- ✅ Backend API - 72+ endpoints, fully operational
+- ✅ Multi-AI Integration - 5 providers ready
+- ✅ NEXUS Engine - Anti-hallucination with statistics tracking
+- ✅ AI Agents - 5 specialized agents functional
+- ✅ Time-Travel Debugging - Complete backend API
+- ✅ Database Schema - Prisma models with migrations
+- ✅ Docker Deployment - One-command setup
+- ✅ **CI/CD Pipeline** - GitHub Actions workflows
+- ✅ **Security Scanning** - CodeQL, Snyk, Trivy
+- ✅ **Documentation** - Comprehensive guides
 
-**What Needs Work:**
-- ⚠️ VS Code Extension (45%) - Structure done, UI incomplete
-- ⚠️ Web Dashboard (35%) - Pages skeletal, needs implementation
-- ⚠️ Chrome Extension (25%) - Built but needs backend integration
-- ⚠️ Testing (30%) - Blocked by database setup requirement
+**Frontend Components: In Progress (40%)**
+- ⚠️ VS Code Extension (45%) - Structure complete, UI needed
+- ⚠️ Web Dashboard (35%) - Next.js setup, pages needed
+- ⚠️ Chrome Extension (25%) - Built, needs integration
 
-**To Get Started:**
-1. Set up PostgreSQL: `npm run db:migrate && npm run db:seed`
-2. Add at least one AI API key to `.env`
-3. Start server: `npm run dev` or `npm run docker:up`
-
-See [CURRENT_STATUS.md](./CURRENT_STATUS.md) for detailed breakdown.
-See [QUICK_START.md](./QUICK_START.md) for setup instructions.
+**New in This Release:**
+- 🎉 **Setup Wizard** - Interactive first-time setup
+- 🎉 **CI/CD Workflows** - Automated testing & deployment
+- 🎉 **Security Scanning** - Multi-tool vulnerability detection
+- 🎉 **Statistics Tracking** - NEXUS consensus metrics
+- 🎉 **Comprehensive Docs** - CI/CD, Deployment, Troubleshooting
 
 ---
 
