@@ -9,6 +9,7 @@
     "start": "node dist/index.js",
     "validate": "tsx scripts/validate-env.ts",
     "setup": "npm install && npm run db:generate && tsx scripts/validate-env.ts",
+    "setup-wizard": "node scripts/setup-wizard.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
