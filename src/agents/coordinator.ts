@@ -123,13 +123,20 @@ export class AgentCoordinator {
     if (this.isProcessing) return;
     this.isProcessing = true;
 
-    while (true) {
-      if (this.taskQueue.length > 0) {
-        const task = this.taskQueue.shift()!;
-        await this.executeTask(task);
+    const processLoop = async (): Promise<void> => {
+      while (this.isProcessing) {
+        if (this.taskQueue.length > 0) {
+          const task = this.taskQueue.shift()!;
+          await this.executeTask(task);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 100));
       }
-      await new Promise((resolve) => setTimeout(resolve, 100));
-    }
+    };
+
+    processLoop().catch((error) => {
+      logger.error('Agent coordinator processing loop error:', error);
+      this.isProcessing = false;
+    });
   }
 }
 
